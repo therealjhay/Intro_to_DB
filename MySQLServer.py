@@ -1,5 +1,3 @@
-# MySQLServer.py
-
 import mysql.connector
 from mysql.connector import errorcode
 
@@ -11,46 +9,46 @@ DB_CONFIG = {
     'password': '17October1970$$' 
 }
 
+
 DATABASE_NAME = 'alx_book_store'
 
-def create_database():
+def create_alx_book_store_database():
     """
-    Connects to MySQL server and creates the specified database.
-    Does not fail if the database already exists.
-    Handles connection errors and ensures proper closing.
+    Connects to the MySQL server and creates the 'alx_book_store' database.
+    It won't fail if the database already exists.
+    Handles connection errors and ensures proper closing of resources.
     """
     connection = None
     cursor = None
     try:
-        # Establish a connection to the MySQL server
-        # We don't specify a database here, as we intend to create one
+        # Attempt to connect to the MySQL server (without specifying a database initially)
         print(f"Attempting to connect to MySQL server at {DB_CONFIG['host']}...")
         connection = mysql.connector.connect(**DB_CONFIG)
         cursor = connection.cursor()
 
-        # Create the database using IF NOT EXISTS to prevent errors if it already exists
+        # Execute the SQL query to create the database IF NOT EXISTS
+        # This prevents errors if 'alx_book_store' already exists
         create_db_query = f"CREATE DATABASE IF NOT EXISTS {DATABASE_NAME}"
         cursor.execute(create_db_query)
 
         print(f"Database '{DATABASE_NAME}' created successfully!")
 
     except mysql.connector.Error as err:
+        # Catch specific MySQL connection errors
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Error: Access denied. Check your username and password.")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Error: Database does not exist (this shouldn't happen during creation).")
+            print("Error: Access denied. Double-check your MySQL username and password in the script.")
         else:
-            print(f"Error connecting to the database or creating it: {err}")
+            print(f"An error occurred while connecting to MySQL or creating the database: {err}")
     except Exception as e:
+        # Catch any other unexpected errors
         print(f"An unexpected error occurred: {e}")
     finally:
-        # Ensure cursor and connection are closed
+        # Always ensure the cursor and connection are closed
         if cursor:
             cursor.close()
-            print("Cursor closed.")
         if connection and connection.is_connected():
             connection.close()
-            print("Database connection closed.")
+            print("MySQL connection closed.")
 
 if __name__ == "__main__":
-    create_database()
+    create_alx_book_store_database()
