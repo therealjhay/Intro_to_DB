@@ -5,3 +5,4 @@
 --    mysql -u your_user -p your_password alx_book_store < task_3.sql
 
 SHOW TABLES;
+USE alx_book_store;
